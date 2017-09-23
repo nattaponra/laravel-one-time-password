@@ -30,10 +30,12 @@ class OTPGenerator
     public function getOtpMessage($message){
         return $this->otp_message;
     }
+
+
    public function generateAndSendSMS($countryCode,$mobileNumber){
         $code=$this->generateOTP();
-        $this->createOTPRecord($code,"waiting");
-        $this->sendSMSOTP($code,$countryCode,$mobileNumber);
+        $this->createOTPRecord($code,"waiting",$mobileNumber);
+        //$this->sendSMSOTP($code,$countryCode,$mobileNumber);
    }
     private function generateOTP(){
         $notOverlap = false;
@@ -46,11 +48,12 @@ class OTPGenerator
         }
         return $code;
     }
-    private function createOTPRecord($code,$status){
+    private function createOTPRecord($code,$status,$mobileNumber){
         //Save into database.
         $OTP = new OneTimePassword;
         $OTP->otp_code = $code;
         $OTP->status   = $status;
+        $OTP->phone_number = $mobileNumber;
         $OTP->save();
         return $OTP;
     }
