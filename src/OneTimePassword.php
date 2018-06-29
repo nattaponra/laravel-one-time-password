@@ -22,7 +22,9 @@ class OneTimePassword extends Model
 
        $otp = $this->createOTP();
        if(!empty($otp)){
-           $this->sendOTPWithService($this->user,$otp);
+           if(env("APP_ENV") == "production"){
+               $this->sendOTPWithService($this->user,$otp);
+           }
            return true;
        }
         return null;
@@ -37,13 +39,18 @@ class OneTimePassword extends Model
      public function createOTP(){
 
           $this->discardOldPassword();
-          $otp = $this->OTPGenerator();
+          $otp  = $this->OTPGenerator();
+          $otp_code = $otp;
+          if(config("otp.encode_password",false)){
+              $otp_code = Hash::make($otp);
+          }
+
           $this->oneTimePasswordLogs()->create([
                'user_id'      => $this->user->id ,
-               'otp_code'     => Hash::make($otp),
+               'otp_code'     => $otp_code,
                'refer_number' => $this->ReferenceNumber(),
                'status'       => 'waiting',
-           ]);
+          ]);
 
           return $otp;
      }
@@ -71,8 +78,14 @@ class OneTimePassword extends Model
                                ->where("user_id",$this->user->id)
                                ->where("status","waiting")->first();
 
+
          if(!empty($oneTimePasswordLog)){
-             return Hash::check($oneTimePassword, $oneTimePasswordLog->otp_code);
+
+             if(config("otp.encode_password",false)){
+                 return Hash::check($oneTimePassword, $oneTimePasswordLog->otp_code);
+             }else{
+                 return $oneTimePasswordLog->otp_code == $oneTimePassword;
+             }
          }
 
          return false;
