@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOneTimePasswordsTable extends Migration
+class CreateOneTimePasswordLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateOneTimePasswordsTable extends Migration
      */
     public function up()
     {
-        Schema::create('one_time_passwords', function (Blueprint $table) {
+        Schema::create('one_time_password_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger("user_id")->index();
+            $table->string('otp_code')->index();
+            $table->string('refer_number')->index();
             $table->string('status')->index();
             $table->timestamps();
             $table->foreign('user_id') ->references('id')->on('users')->onDelete('cascade');
@@ -30,6 +32,6 @@ class CreateOneTimePasswordsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('one_time_passwords');
+        Schema::dropIfExists('one_time_password_logs');
     }
 }
