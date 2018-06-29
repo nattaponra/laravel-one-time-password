@@ -19,7 +19,19 @@ class OneTimePassword extends Model
      }
 
      public function send(){
-       return $this->createOTP();
+
+       $otp = $this->createOTP();
+       if(!empty($otp)){
+           $this->sendOTPWithService($this->user,$otp);
+           return true;
+       }
+        return null;
+     }
+
+     private function sendOTPWithService($user,$otp){
+         $chatKunFactory = new ServiceFactory();
+         $service = $chatKunFactory->getService(config("otp.otp_default_service",null));
+         $service->sendOneTimePassword($user,$otp);
      }
 
      public function createOTP(){
