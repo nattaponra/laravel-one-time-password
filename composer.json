@@ -1,5 +1,5 @@
 {
-    "name": "nattaponra/otpgenerator",
+    "name": "nattaponra/laravel-one-time-password",
     "license": "MIT License",
     "authors": [
         {
@@ -10,5 +10,8 @@
     "require": {
         "php": ">=5.6.4",
         "twilio/sdk": "^5.13"
+    },
+    "autoload": {
+        "psr-4": {"nattaponra\\LaravelOneTimePassword\\": "src/"}
     }
 }
