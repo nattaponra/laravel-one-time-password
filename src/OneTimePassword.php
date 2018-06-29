@@ -22,7 +22,7 @@ class OneTimePassword extends Model
 
        $otp = $this->createOTP();
        if(!empty($otp)){
-           if(env("APP_ENV") == "production"){
+           if(config("otp.otp_service_enabled",false)){
                $this->sendOTPWithService($this->user,$otp);
            }
            return true;

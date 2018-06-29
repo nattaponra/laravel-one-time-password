@@ -1,6 +1,7 @@
 <?php
 return
     [
+        'otp_service_enabled' => false,
         'otp_default_service' => env('OTP_DEFAULT_SMS_SERVICE', 'clickend'),
 
         'services' => [
@@ -24,6 +25,7 @@ return
 
         'opt_digit_length'=> 4,
 
-        'encode_password' => false
+        'encode_password' => false ,
+
     ];
 
