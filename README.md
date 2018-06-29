@@ -1,2 +1,2 @@
-# OTPGenerator
-OTP generate and send sms verification.
+# Laravel One Time Password
+Laravel verification with one time password (OTP).
