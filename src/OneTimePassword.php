@@ -4,6 +4,7 @@ namespace nattaponra\LaravelOneTimePassword;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class OneTimePassword extends Model
 {
@@ -22,12 +23,17 @@ class OneTimePassword extends Model
      }
 
      public function createOTP(){
-          return $this->oneTimePasswordLogs()->create([
+
+          $this->discardOldPassword();
+          $otp = $this->OTPGenerator();
+          $this->oneTimePasswordLogs()->create([
                'user_id'      => $this->user->id ,
-               'otp_code'     => $this->OTPGenerator(),
+               'otp_code'     => Hash::make($otp),
                'refer_number' => $this->ReferenceNumber(),
                'status'       => 'waiting',
            ]);
+
+          return $otp;
      }
 
      private function ReferenceNumber(){
@@ -38,5 +44,25 @@ class OneTimePassword extends Model
      private function OTPGenerator(){
          $number = strval(rand(10000000,99999999));
          return substr($number,0,config("otp.opt_digit_length",4));
+     }
+
+     public function getCurrentPassword(){
+         return $this->oneTimePasswordLogs()->where("user_id",$this->user->id)->where("status","waiting")->update(["status" => "discarded"]);
+     }
+
+     private function discardOldPassword(){
+         return $this->oneTimePasswordLogs()->where("user_id",$this->user->id)->where("status","waiting")->update(["status" => "discarded"]);
+     }
+
+     public function checkPassword($oneTimePassword){
+         $oneTimePasswordLog = $this->oneTimePasswordLogs()
+                               ->where("user_id",$this->user->id)
+                               ->where("status","waiting")->first();
+
+         if(!empty($oneTimePasswordLog)){
+             return Hash::check($oneTimePassword, $oneTimePasswordLog->otp_code);
+         }
+
+         return false;
      }
 }
