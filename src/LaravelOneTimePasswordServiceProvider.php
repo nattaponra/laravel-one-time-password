@@ -1,10 +1,10 @@
 <?php
 
-namespace Nattaponra\OTPGenerator;
+namespace nattaponra\laravelOneTimePassword;
 
 use Illuminate\Support\ServiceProvider;
 
-class OTPGeneratorServiceProvider extends ServiceProvider
+class LaravelOneTimePasswordServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -13,10 +13,9 @@ class OTPGeneratorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind('otpgenerator',function($app){
+        $this->loadMigrationsFrom(__DIR__.'/migrations');
 
-            return new OTPGenerator;
-        });
+         $this->publishes([__DIR__.'/config/config.php' => config_path('otp.php'),]);
     }
 
     /**
