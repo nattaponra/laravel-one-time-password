@@ -2,11 +2,11 @@
 return
     [
         'otp_service_enabled' => false,
-        'otp_default_service' => env('OTP_DEFAULT_SMS_SERVICE', 'clickend'),
+        'otp_default_service' => env('OTP_DEFAULT_SMS_SERVICE', 'clicksend'),
 
         'services' => [
 
-            'clickend'=> [
+            'clicksend'=> [
                 'username' => env("CLICKSEND_USERNAME",null),
                 'api_key'  => env("CLICKSEND_API_KEY",null),
                 'sms_from' => env("CLICKSEND_SMS_FROM",null),
