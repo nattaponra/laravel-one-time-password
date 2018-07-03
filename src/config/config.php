@@ -1,7 +1,7 @@
 <?php
 return
     [
-        'otp_service_enabled' => false,
+        'otp_service_enabled' => true,
         'otp_default_service' => env('OTP_DEFAULT_SMS_SERVICE', 'clicksend'),
 
         'services' => [

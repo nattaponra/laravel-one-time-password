@@ -19,7 +19,9 @@ class ClickSendSMS implements ServiceInterface
     public function sendOneTimePassword(User $user,$otp)
     {
 
-
+            if(empty($user->mobile_number)){
+                return false;
+            }
             $smsMessage[]  = [
                 "source"        => "php",
                 "from"          => config('otp.services.clicksend.sms_from', ""),
