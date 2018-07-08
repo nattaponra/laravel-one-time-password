@@ -24,8 +24,8 @@ class ClickSendSMS implements ServiceInterface
             }
             $smsMessage[]  = [
                 "source"        => "php",
-                "from"          => config('otp.services.clicksend.sms_from', ""),
-                "body"          => "This is your one-time password ".$otp,
+                "from"          =>  config('otp.services.clicksend.sms_from', ""),
+                "body"          =>  config("otp.otp_message","Your one-time password is")." ".$otp,
                 "to"            =>  $user->mobile_number,
                 "custom_string" => "this is a test"
             ];
